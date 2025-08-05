@@ -2,29 +2,28 @@
 
 namespace DirectoryTree\Anonymize;
 
-use Faker\Factory;
 use Faker\Generator;
 
 class AnonymizeManager
 {
-    /**
-     * The Faker instance.
-     */
-    protected Generator $faker;
-
     /**
      * Whether anonymization is enabled.
      */
     protected bool $enabled = false;
 
     /**
+     * Constructor.
+     */
+    public function __construct(
+        protected readonly Generator $faker
+    ) {}
+
+    /**
      * Create a new Faker instance with the given seed.
      */
     public function faker(string|int|null $seed = null): Generator
     {
-        $this->faker ??= Factory::create();
-
-        $this->faker->seed($seed);
+        $this->faker->seed(is_string($seed) ? crc32($seed) : $seed);
 
         return $this->faker;
     }

@@ -1,3 +1,5 @@
+/.idea
+/.direnv
 build
 composer.lock
 docs

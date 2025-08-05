@@ -5,9 +5,8 @@ namespace DirectoryTree\Anonymize\Tests;
 use DirectoryTree\Anonymize\Anonymizable;
 use DirectoryTree\Anonymize\Anonymized;
 use Faker\Generator;
-use Illuminate\Database\Eloquent\Model;
 
-class AnonymizedModel extends Model implements Anonymizable
+class AnonymizedModel extends BaseModel implements Anonymizable
 {
     use Anonymized;
 
@@ -15,6 +14,7 @@ class AnonymizedModel extends Model implements Anonymizable
     {
         return [
             'name' => $faker->name(),
+            'address' => $faker->address(),
         ];
     }
 }

@@ -2,21 +2,85 @@
 
 namespace DirectoryTree\Anonymize;
 
-use DirectoryTree\Anonymize\Facades\Anonymize;
 use Faker\Generator;
+use Illuminate\Container\Container;
 
+/**
+ * @mixin Anonymizable
+ */
 trait Anonymized
 {
     /**
-     * Get an attribute from the model.
+     * The anonymize manager instance.
      */
-    public function getAttribute($key): mixed
+    protected static ?AnonymizeManager $anonymizeManager = null;
+
+    /**
+     * Whether to enable anonymization for the current model instance.
+     */
+    private bool $anonymizeEnabled = true;
+
+    /**
+     * The anonymized attributes for the current model instance and seed.
+     */
+    private array $anonymizedAttributeCache;
+
+    /**
+     * The seed for the cached anonymized attributes.
+     */
+    private string $anonymizedAttributeCacheSeed;
+
+    /**
+     * Set the anonymize manager instance.
+     */
+    public static function setManager(AnonymizeManager $manager): void
     {
-        if (! Anonymize::isEnabled()) {
-            return parent::getAttribute($key);
+        static::$anonymizeManager = $manager;
+    }
+
+    /**
+     * Boot the anonymized trait.
+     */
+    protected static function bootAnonymized(): void
+    {
+        if (! isset(static::$anonymizeManager)) {
+            static::setManager(Container::getInstance()->make(AnonymizeManager::class));
+        }
+    }
+
+    /**
+     * Get the anonymized attributes.
+     */
+    abstract public function getAnonymizedAttributes(Generator $faker): array;
+
+    /**
+     * Get all of the current attributes on the model.
+     *
+     * @return array<string, mixed>
+     */
+    public function attributesToArray(): array
+    {
+        $attributes = parent::attributesToArray();
+
+        if ($this->anonymizeEnabled && static::$anonymizeManager?->isEnabled()) {
+            $attributes = $this->addAnonymizedAttributesToArray($attributes);
         }
 
-        return $this->getAnonymizedAttribute($key, fn () => parent::getAttribute($key));
+        return $attributes;
+    }
+
+    /**
+     * Get a plain attribute (not a relationship).
+     *
+     * @param  string  $key
+     */
+    public function getAttributeValue($key): mixed
+    {
+        if (! $this->anonymizeEnabled || ! static::$anonymizeManager?->isEnabled()) {
+            return parent::getAttributeValue($key);
+        }
+
+        return $this->getCachedAnonymizedAttributes()[$key] ?? parent::getAttributeValue($key);
     }
 
     /**
@@ -24,7 +88,7 @@ trait Anonymized
      */
     public function getAnonymizableSeed(): string
     {
-        return get_class($this).':'.$this->getAttributeFromArray('id');
+        return get_class($this).':'.$this->getKey();
     }
 
     /**
@@ -32,9 +96,7 @@ trait Anonymized
      */
     public function getAnonymizedAttribute(string $key, mixed $default): mixed
     {
-        $faker = Anonymize::faker($this->getAnonymizableSeed());
-
-        $attributes = $this->getAnonymizedAttributes($faker);
+        $attributes = $this->getCachedAnonymizedAttributes();
 
         if (! array_key_exists($key, $attributes)) {
             return value($default);
@@ -44,7 +106,58 @@ trait Anonymized
     }
 
     /**
-     * Get the anonymized attributes.
+     * @template TReturn
+     *
+     * @param  callable($this): TReturn  $callback
+     * @return TReturn
      */
-    abstract public function getAnonymizedAttributes(Generator $faker): array;
+    public function withoutAnonymization(callable $callback): mixed
+    {
+        $previous = $this->anonymizeEnabled;
+
+        $this->anonymizeEnabled = false;
+
+        try {
+            return $callback($this);
+        } finally {
+            $this->anonymizeEnabled = $previous;
+        }
+    }
+
+    /**
+     * Make the anonymized attributes.
+     */
+    protected function getCachedAnonymizedAttributes(): array
+    {
+        return $this->withoutAnonymization(function (): array {
+            $seed = $this->getAnonymizableSeed();
+
+            if (! isset($this->anonymizedAttributeCache) || $this->anonymizedAttributeCacheSeed !== $seed) {
+                $this->anonymizedAttributeCache = $this->getAnonymizedAttributes(
+                    static::$anonymizeManager->faker($seed)
+                );
+
+                $this->anonymizedAttributeCacheSeed = $seed;
+            }
+
+            return $this->anonymizedAttributeCache;
+        });
+    }
+
+    /**
+     * @param  array<string, mixed>  $attributes
+     * @return array<string, mixed>
+     */
+    protected function addAnonymizedAttributesToArray(array $attributes): array
+    {
+        foreach ($this->getCachedAnonymizedAttributes() as $key => $value) {
+            if (! array_key_exists($key, $attributes)) {
+                continue;
+            }
+
+            $attributes[$key] = $value;
+        }
+
+        return $attributes;
+    }
 }
