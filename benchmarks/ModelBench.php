@@ -2,7 +2,6 @@
 
 namespace DirectoryTree\Anonymize\Benchmarks;
 
-use DirectoryTree\Anonymize\Tests\Benchmark;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use PhpBench\Attributes\BeforeMethods;
