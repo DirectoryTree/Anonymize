@@ -10,6 +10,9 @@ class AnonymizedModel extends BaseModel implements Anonymizable
 {
     use Anonymized;
 
+    /**
+     * {@inheritDoc}
+     */
     public function getAnonymizedAttributes(Generator $faker): array
     {
         return [

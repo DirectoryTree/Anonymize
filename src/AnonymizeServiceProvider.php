@@ -15,13 +15,9 @@ class AnonymizeServiceProvider extends ServiceProvider implements DeferrableProv
      */
     public function register(): void
     {
-        $this->app->singleton(AnonymizeManager::class);
-
-        $this->app->when(AnonymizeManager::class)
-            ->needs(Generator::class)
-            ->give(static fn (Application $app): Generator => (
-                $app->bound(Generator::class) ? $app->make(Generator::class) : Factory::create()
-            ));
+        $this->app->singleton(AnonymizeManager::class, static fn (Application $app): AnonymizeManager => (
+            new AnonymizeManager($app->bound(Generator::class) ? $app->make(Generator::class) : Factory::create())
+        ));
     }
 
     /**

@@ -13,22 +13,22 @@ trait Anonymized
     /**
      * The anonymize manager instance.
      */
-    protected static ?AnonymizeManager $anonymizeManager = null;
+    protected static ?AnonymizeManager $anonymizeManager;
 
     /**
      * Whether to enable anonymization for the current model instance.
      */
-    private bool $anonymizeEnabled = true;
+    protected bool $anonymizeEnabled = true;
 
     /**
      * The anonymized attributes for the current model instance and seed.
      */
-    private array $anonymizedAttributeCache;
+    protected array $anonymizedAttributeCache;
 
     /**
      * The seed for the cached anonymized attributes.
      */
-    private string $anonymizedAttributeCacheSeed;
+    protected string $anonymizedAttributeCacheSeed;
 
     /**
      * Set the anonymize manager instance.
@@ -88,7 +88,7 @@ trait Anonymized
      */
     public function getAnonymizableSeed(): string
     {
-        return get_class($this).':'.$this->getKey();
+        return get_class($this).':'.$this->getAttributeValue('id');
     }
 
     /**
@@ -145,6 +145,8 @@ trait Anonymized
     }
 
     /**
+     * Add the anonymized attributes to the attribute array.
+     *
      * @param  array<string, mixed>  $attributes
      * @return array<string, mixed>
      */

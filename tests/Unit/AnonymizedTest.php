@@ -4,12 +4,22 @@ use DirectoryTree\Anonymize\AnonymizeManager;
 use DirectoryTree\Anonymize\Tests\AnonymizedModel;
 use Faker\Factory;
 
+it('does not leak data via serialize', function () {
+    setManager()->enable();
+
+    $model = new AnonymizedModel([
+        'name' => 'Foo Bar',
+    ]);
+
+    expect(serialize($model))->not->toContain($model->name);
+});
+
 it('invalidates attribute cache when seed changes', function () {
     setManager()->enable();
 
     $model = new AnonymizedModel([
         'id' => 1,
-        'name' => 'Foo',
+        'name' => 'Foo Bar',
     ]);
 
     $attributes1 = $model->attributesToArray();
@@ -21,7 +31,7 @@ it('invalidates attribute cache when seed changes', function () {
     expect($attributes1)->not->toBe($attributes2);
 });
 
-it('returns unique attributes for models with distinct keys', function () {
+it('returns unique attributes for models with distinct ids', function () {
     setManager()->enable();
 
     $model1Attributes = (new AnonymizedModel([
@@ -37,7 +47,7 @@ it('returns unique attributes for models with distinct keys', function () {
     expect($model1Attributes)->not->toBe($model2Attributes);
 });
 
-it('returns same attributes for models with same key', function () {
+it('returns same attributes for models with same id', function () {
     setManager()->enable();
 
     $model1Original = [
@@ -138,12 +148,12 @@ it('withoutAnonymization prevents attributes from being anonymized when anonymiz
     expect($attributes)->toBe($original);
 });
 
-it('includes key in seed by default', function () {
-    $key = fake()->randomNumber();
+it('includes id in seed by default', function () {
+    $id = fake()->randomNumber();
 
-    $seed = (new AnonymizedModel(['id' => $key]))->getAnonymizableSeed();
+    $seed = (new AnonymizedModel(['id' => $id]))->getAnonymizableSeed();
 
-    expect($seed)->toContain($key);
+    expect($seed)->toContain($id);
 });
 
 function setManager(): AnonymizeManager

@@ -7,7 +7,7 @@ use Faker\Generator;
 interface Anonymizable
 {
     /**
-     * Get the seed to use for faker.
+     * Get the seed value used to ensure consistent fake data generation.
      */
     public function getAnonymizableSeed(): string;
 
