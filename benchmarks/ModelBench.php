@@ -12,6 +12,7 @@ use PhpBench\Attributes\Revs;
 abstract class ModelBench extends Benchmark
 {
     protected Model $model;
+
     protected Collection $collection;
 
     #[Revs(100000), Iterations(10), BeforeMethods('setUpModel')]
@@ -31,7 +32,7 @@ abstract class ModelBench extends Benchmark
         $this->model = $this->newModel([
             'name' => 'Foo Bar',
             'address' => '1600 Pennsylvania Avenue',
-            'favourite_color' => 'blue'
+            'favourite_color' => 'blue',
         ]);
     }
 
@@ -40,7 +41,7 @@ abstract class ModelBench extends Benchmark
         $this->collection = Collection::make(array_fill(0, 1000, $this->newModel([
             'name' => 'Foo Bar',
             'address' => '1600 Pennsylvania Avenue',
-            'favourite_color' => 'blue'
+            'favourite_color' => 'blue',
         ])))->map(fn (Model $model, int $i) => (clone $model)->fill(['id' => $i]));
     }
 

@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class AnonymizedModelBench extends ModelBench
 {
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
         Anonymize::enable();
