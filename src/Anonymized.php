@@ -92,20 +92,6 @@ trait Anonymized
     }
 
     /**
-     * Get the anonymized attribute.
-     */
-    public function getAnonymizedAttribute(string $key, mixed $default): mixed
-    {
-        $attributes = $this->getCachedAnonymizedAttributes();
-
-        if (! array_key_exists($key, $attributes)) {
-            return value($default);
-        }
-
-        return $attributes[$key];
-    }
-
-    /**
      * @template TReturn
      *
      * @param  callable($this): TReturn  $callback
