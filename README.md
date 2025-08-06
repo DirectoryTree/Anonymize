@@ -1,7 +1,7 @@
 # Anonymize
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/directorytree/anonymize.svg?style=flat-square)](https://packagist.org/packages/directorytree/anonymize)
-[![Tests](https://img.shields.io/github/actions/workflow/status/DirectoryTree/Anonymize/tests.yml?branch=master&label=tests&style=flat-square)](https://github.com/DirectoryTree/Anonymize/actions/workflows/tests.yml)
+[![Tests](https://img.shields.io/github/actions/workflow/status/DirectoryTree/Anonymize/run-tests.yml?branch=master&label=tests&style=flat-square)](https://github.com/DirectoryTree/Anonymize/actions/workflows/tests.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/directorytree/anonymize.svg?style=flat-square)](https://packagist.org/packages/directorytree/anonymize)
 
 Anonymize replaces sensitive model data with realistic fake data using Faker. Perfect for development environments, demos, and data sharing scenarios where you need to protect user privacy while maintaining data structure and relationships.
