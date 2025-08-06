@@ -10,19 +10,16 @@ Anonymize replaces sensitive model data with realistic fake data using Faker. Pe
 - **Privacy-First**: Automatically anonymize sensitive model attributes
 - **Consistent Data**: Same model ID always generates the same fake data
 - **Seamless Integration**: Works transparently with existing Eloquent models
-- **Serialization Safe**: Prevents data leaks even when models are serialized
 - **Granular Control**: Enable/disable anonymization globally or per-model instance
 - **Performance Optimized**: Intelligent caching prevents redundant fake data generation
 
 ## Installation
 
-You can install the package via Composer:
+You can install the Anonymize using Composer:
 
 ```bash
 composer require directorytree/anonymize
 ```
-
-The package will automatically register its service provider.
 
 ## Usage
 
