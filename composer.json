@@ -1,6 +1,6 @@
 {
     "name": "directorytree/anonymize",
-    "description": "A Laravel package for data anonymization",
+    "description": "Anonymize sensitive model data with realistic fake data using Faker",
     "type": "library",
     "license": "MIT",
     "authors": [
