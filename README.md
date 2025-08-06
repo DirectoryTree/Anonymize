@@ -26,7 +26,7 @@ The package will automatically register its service provider.
 
 ## Quick Start
 
-### 1. Set Up Your Model
+### Set Up Your Model
 
 Make your Eloquent model implement the `Anonymizable` contract and use the `Anonymized` trait:
 
@@ -56,7 +56,7 @@ class User extends Model implements Anonymizable
 }
 ```
 
-### 2. Enable Anonymization
+### Enable Anonymization
 
 Somewhere within your application, enable anonymization:
 
