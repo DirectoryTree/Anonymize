@@ -28,17 +28,19 @@ The package will automatically register its service provider.
 
 ### Set Up Your Model
 
-Make your Eloquent model implement the `Anonymizable` contract and use the `Anonymized` trait:
+Implement the `Anonymizable` interface and use the `Anonymized` trait on your Eloquent model.
+
+Then, define the attributes you want to anonymize in the `getAnonymizedAttributes()` method:
 
 ```php
 <?php
 
 namespace App\Models;
 
-use DirectoryTree\Anonymize\Anonymizable;
-use DirectoryTree\Anonymize\Anonymized;
 use Faker\Generator;
 use Illuminate\Database\Eloquent\Model;
+use DirectoryTree\Anonymize\Anonymized;
+use DirectoryTree\Anonymize\Anonymizable;
 
 class User extends Model implements Anonymizable
 {
@@ -56,9 +58,9 @@ class User extends Model implements Anonymizable
 }
 ```
 
-The attributes returned by `getAnonymizedAttributes()` will replace the original attributes when anonymization is enabled.
+The attributes returned by `getAnonymizedAttributes()` will replace its original attributes when anonymization is enabled.
 
-Attributes not defined in the `getAnonymizedAttributes()` will not be anonymized.
+Attributes that are not defined in the `getAnonymizedAttributes()` will not be anonymized, and will be returned as-is.
 
 ### Enable Anonymization
 
