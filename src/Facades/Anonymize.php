@@ -6,6 +6,11 @@ use DirectoryTree\Anonymize\AnonymizeManager;
 use Illuminate\Support\Facades\Facade;
 
 /**
+ * @method static void enable()
+ * @method static void disable()
+ * @method static bool isEnabled()
+ * @method static \Faker\Generator faker(string|int|null $seed = null)
+ *
  * @see \DirectoryTree\Anonymize\AnonymizeManager
  */
 class Anonymize extends Facade
