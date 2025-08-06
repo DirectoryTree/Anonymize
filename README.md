@@ -3,16 +3,16 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/directorytree/anonymize.svg?style=flat-square)](https://packagist.org/packages/directorytree/anonymize)
 [![Total Downloads](https://img.shields.io/packagist/dt/directorytree/anonymize.svg?style=flat-square)](https://packagist.org/packages/directorytree/anonymize)
 
-**Anonymize** is an elegant Laravel package that seamlessly replaces sensitive model data with realistic fake data using Faker. Perfect for development environments, demos, and data sharing scenarios where you need to protect user privacy while maintaining data structure and relationships.
+Anonymize replaces sensitive model data with realistic fake data using Faker. Perfect for development environments, demos, and data sharing scenarios where you need to protect user privacy while maintaining data structure and relationships.
 
-## ✨ Features
+## Features
 
-- 🔒 **Privacy-First**: Automatically anonymize sensitive model attributes
-- 🎯 **Consistent Data**: Same model ID always generates the same fake data
-- ⚡ **Performance Optimized**: Intelligent caching prevents redundant fake data generation
-- 🎛️ **Granular Control**: Enable/disable anonymization globally or per-model instance
-- 🔄 **Seamless Integration**: Works transparently with existing Eloquent models
-- 🛡️ **Serialization Safe**: Prevents data leaks even when models are serialized
+- **Privacy-First**: Automatically anonymize sensitive model attributes
+- **Consistent Data**: Same model ID always generates the same fake data
+- **Seamless Integration**: Works transparently with existing Eloquent models
+- **Serialization Safe**: Prevents data leaks even when models are serialized
+- **Granular Control**: Enable/disable anonymization globally or per-model instance
+- **Performance Optimized**: Intelligent caching prevents redundant fake data generation
 
 ## Installation
 
