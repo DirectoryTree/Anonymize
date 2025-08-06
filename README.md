@@ -174,15 +174,6 @@ public function getAnonymizedAttributes(Generator $faker): array
 }
 ```
 
-## Performance
-
-The package is designed for optimal performance:
-
-- Fake data is generated only when needed
-- Results are cached per model instance
-- Cache is automatically invalidated when the model's seed changes
-- Minimal overhead when anonymization is disabled
-
 ## Testing
 
 ```bash
