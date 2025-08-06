@@ -31,7 +31,7 @@ it('invalidates attribute cache when seed changes', function () {
     expect($attributes1)->not->toBe($attributes2);
 });
 
-it('returns unique attributes for models with distinct ids', function () {
+it('generates different attributes for models with distinct ids', function () {
     setManager()->enable();
 
     $model1Attributes = (new AnonymizedModel([
@@ -47,25 +47,23 @@ it('returns unique attributes for models with distinct ids', function () {
     expect($model1Attributes)->not->toBe($model2Attributes);
 });
 
-it('returns same attributes for models with same id', function () {
+it('generates the same attributes for models with the same id', function () {
     setManager()->enable();
 
-    $model1Original = [
+    $model1Attributes = (new AnonymizedModel([
         'id' => 1,
         'name' => 'Foo',
-    ];
-    $model1Attributes = (new AnonymizedModel($model1Original))->attributesToArray();
+    ]))->attributesToArray();
 
-    $model2Original = [
+    $model2Attributes = (new AnonymizedModel([
         'id' => 1,
         'name' => 'Bar',
-    ];
-    $model2Attributes = (new AnonymizedModel($model2Original))->attributesToArray();
+    ]))->attributesToArray();
 
     expect($model1Attributes)->toBe($model2Attributes);
 });
 
-it('only overwrites anonymized attributes', function () {
+it('overwrites only anonymized attributes', function () {
     setManager()->enable();
 
     $attributes = (new AnonymizedModel([
@@ -75,7 +73,7 @@ it('only overwrites anonymized attributes', function () {
     expect($attributes)->toHaveKey('favourite_color', 'blue');
 });
 
-it('only anonymizes existing attributes', function () {
+it('anonymizes only attributes that exist on the model', function () {
     setManager()->enable();
 
     $attributes = (new AnonymizedModel([
@@ -85,7 +83,7 @@ it('only anonymizes existing attributes', function () {
     expect($attributes)->toHaveCount(1)->toHaveKey('name');
 });
 
-it('attribute array is anonymized when anonymization is enabled', function () {
+it('anonymizes attributes array when anonymization is enabled', function () {
     setManager()->enable();
 
     $attributes = (new AnonymizedModel([
@@ -97,7 +95,7 @@ it('attribute array is anonymized when anonymization is enabled', function () {
         ->and($attributes['address'])->not->toBe('original-address');
 });
 
-it('attributes are anonymized when anonymization is enabled', function () {
+it('anonymizes attributes when anonymization is enabled', function () {
     setManager()->enable();
 
     $model = new AnonymizedModel([
@@ -109,7 +107,7 @@ it('attributes are anonymized when anonymization is enabled', function () {
         ->and($model->getAttributeValue('address'))->not->toBe('original-address');
 });
 
-test('attribute array is not anonymized when anonymization is disabled', function () {
+it('does not anonymize attributes array when anonymization is disabled', function () {
     setManager()->disable();
 
     $original = [
@@ -122,7 +120,7 @@ test('attribute array is not anonymized when anonymization is disabled', functio
     expect($attributes)->toBe($original);
 });
 
-it('attributes are not anonymized when anonymization is disabled', function () {
+it('does not anonymize attributes when anonymization is disabled', function () {
     setManager()->disable();
 
     $model = new AnonymizedModel([
@@ -134,7 +132,7 @@ it('attributes are not anonymized when anonymization is disabled', function () {
         ->and($model->getAttributeValue('address'))->toBe('1600 Pennsylvania Avenue');
 });
 
-it('withoutAnonymization prevents attributes from being anonymized when anonymization is enabled', function () {
+it('disables anonymization within withoutAnonymization block', function () {
     setManager()->enable();
 
     $original = [
