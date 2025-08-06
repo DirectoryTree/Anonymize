@@ -5,14 +5,14 @@ namespace DirectoryTree\Anonymize\Tests;
 use DirectoryTree\Anonymize\Anonymizable;
 use DirectoryTree\Anonymize\Anonymized;
 use Faker\Generator;
+use Illuminate\Database\Eloquent\Model;
 
-class AnonymizedModel extends BaseModel implements Anonymizable
+class AnonymizedModel extends Model implements Anonymizable
 {
     use Anonymized;
 
-    /**
-     * {@inheritDoc}
-     */
+    protected $guarded = false;
+
     public function getAnonymizedAttributes(Generator $faker): array
     {
         return [
