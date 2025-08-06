@@ -1,0 +1,14 @@
+* text=auto
+
+.envrc export-ignore
+.github export-ignore
+.gitignore export-ignore
+.gitattributes export-ignore
+
+shell.nix export-ignore
+pint.json export-ignore
+phpunit.xml export-ignore
+phpbench.json export-ignore
+
+/tests export-ignore
+/benchmarks export-ignore
