@@ -24,7 +24,7 @@ composer require directorytree/anonymize
 
 The package will automatically register its service provider.
 
-## Quick Start
+## Usage
 
 ### Set Up Your Model
 
@@ -56,6 +56,10 @@ class User extends Model implements Anonymizable
 }
 ```
 
+The attributes returned by `getAnonymizedAttributes()` will replace the original attributes when anonymization is enabled.
+
+Attributes not defined in the `getAnonymizedAttributes()` will not be anonymized.
+
 ### Enable Anonymization
 
 Somewhere within your application, enable anonymization:
@@ -77,11 +81,9 @@ class AppServiceProvider extends ServiceProvider
 }
 ```
 
-## Usage
+### Controlling Anonymization
 
-### Global Control
-
-Control anonymization across your entire application:
+Control anonymization across your application using the `Anonymize` facade:
 
 ```php
 use DirectoryTree\Anonymize\Facades\Anonymize;
@@ -96,22 +98,6 @@ Anonymize::disable();
 if (Anonymize::isEnabled()) {
     // Anonymization is active
 }
-```
-
-### Per-Model Control
-
-Temporarily disable anonymization for specific operations:
-
-```php
-$user = User::find(1);
-
-// Get real data even when anonymization is globally enabled
-$realData = $user->withoutAnonymization(function ($model) {
-    return $model->attributesToArray();
-});
-
-// Or access individual attributes
-$realName = $user->withoutAnonymization(fn ($model) => $model->name);
 ```
 
 ### Consistent Fake Data
@@ -142,9 +128,7 @@ $user1->name !== $user2->name; // true
 $user1->email !== $user2->email; // true
 ```
 
-### Advanced Configuration
-
-#### Custom Seed Generation
+### Custom Seed Generation
 
 Override the seed generation logic for more control.
 
@@ -170,7 +154,7 @@ class User extends Model implements Anonymizable
 }
 ```
 
-#### Conditional Anonymization
+### Conditional Anonymization
 
 Only anonymize specific attributes based on conditions:
 
@@ -190,52 +174,6 @@ public function getAnonymizedAttributes(Generator $faker): array
     return $attributes;
 }
 ```
-
-### Environment-Based Usage
-
-Perfect for different environments:
-
-```php
-// In your AppServiceProvider or middleware
-if (app()->environment(['local', 'staging'])) {
-    Anonymize::enable();
-}
-```
-
-### API Resources
-
-Works seamlessly with API resources:
-
-```php
-class UserResource extends JsonResource
-{
-    public function toArray($request)
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->name, // Will be anonymized if enabled
-            'email' => $this->email, // Will be anonymized if enabled
-            'created_at' => $this->created_at,
-        ];
-    }
-}
-```
-
-## How It Works
-
-1. **Seeded Generation**: Each model generates a unique seed based on its class and ID
-2. **Consistent Output**: The same seed always produces the same fake data
-3. **Selective Replacement**: Only attributes defined in `getAnonymizedAttributes()` are replaced
-4. **Transparent Operation**: Works with `attributesToArray()`, `toArray()`, `toJson()`, and direct attribute access
-5. **Performance Optimized**: Fake data is cached per model instance to avoid regeneration
-
-## Use Cases
-
-- **Development Environments**: Work with realistic data without exposing sensitive information
-- **Demo Applications**: Show your app with convincing data that's not real
-- **Data Sharing**: Share database dumps with partners or team members safely
-- **Testing**: Create consistent test scenarios with predictable fake data
-- **Staging Environments**: Mirror production data structure without privacy concerns
 
 ## Performance
 
