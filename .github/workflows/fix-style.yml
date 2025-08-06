@@ -1,5 +1,3 @@
-name: Code Style
-
 on:
   push:
     branches: [ master ]
