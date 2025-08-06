@@ -13,6 +13,11 @@ Anonymize replaces sensitive model data with realistic fake data using Faker. Pe
 - **Granular Control**: Enable/disable anonymization globally or per-model instance
 - **Performance Optimized**: Intelligent caching prevents redundant fake data generation
 
+## Requirements
+
+- PHP >= 8.2
+- Laravel >= 11
+
 ## Installation
 
 You can install the Anonymize using Composer:
