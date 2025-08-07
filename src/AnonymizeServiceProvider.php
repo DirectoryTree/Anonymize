@@ -22,8 +22,6 @@ class AnonymizeServiceProvider extends ServiceProvider implements DeferrableProv
 
     /**
      * Get the services provided by the provider.
-     *
-     * @return array<int, string>
      */
     public function provides(): array
     {
