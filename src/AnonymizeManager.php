@@ -2,7 +2,10 @@
 
 namespace DirectoryTree\Anonymize;
 
+use DirectoryTree\Anonymize\Events\AnonymizationDisabled;
+use DirectoryTree\Anonymize\Events\AnonymizationEnabled;
 use Faker\Generator;
+use Illuminate\Support\Facades\Event;
 
 class AnonymizeManager
 {
@@ -34,6 +37,8 @@ class AnonymizeManager
     public function enable(): void
     {
         $this->enabled = true;
+
+        Event::dispatch(new AnonymizationEnabled);
     }
 
     /**
@@ -42,6 +47,8 @@ class AnonymizeManager
     public function disable(): void
     {
         $this->enabled = false;
+
+        Event::dispatch(new AnonymizationDisabled);
     }
 
     /**
