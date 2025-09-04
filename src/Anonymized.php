@@ -3,18 +3,13 @@
 namespace DirectoryTree\Anonymize;
 
 use Faker\Generator;
-use Illuminate\Container\Container;
+use Illuminate\Support\Facades\App;
 
 /**
  * @mixin Anonymizable
  */
 trait Anonymized
 {
-    /**
-     * The anonymize manager instance.
-     */
-    protected static ?AnonymizeManager $anonymizeManager;
-
     /**
      * Whether to enable anonymization for the current model instance.
      */
@@ -31,21 +26,11 @@ trait Anonymized
     protected string $anonymizedAttributeCacheSeed;
 
     /**
-     * Set the anonymize manager instance.
+     * Get the anonymize manager instance.
      */
-    public static function setManager(AnonymizeManager $manager): void
+    protected static function getAnonymizeManager(): AnonymizeManager
     {
-        static::$anonymizeManager = $manager;
-    }
-
-    /**
-     * Boot the anonymized trait.
-     */
-    protected static function bootAnonymized(): void
-    {
-        if (! isset(static::$anonymizeManager)) {
-            static::setManager(Container::getInstance()->make(AnonymizeManager::class));
-        }
+        return App::make(AnonymizeManager::class);
     }
 
     /**
@@ -62,7 +47,7 @@ trait Anonymized
     {
         $attributes = parent::attributesToArray();
 
-        if ($this->anonymizeEnabled && static::$anonymizeManager?->isEnabled()) {
+        if ($this->anonymizeEnabled && static::getAnonymizeManager()->isEnabled()) {
             $attributes = $this->addAnonymizedAttributesToArray($attributes);
         }
 
@@ -76,7 +61,7 @@ trait Anonymized
      */
     public function getAttributeValue($key): mixed
     {
-        if (! $this->anonymizeEnabled || ! static::$anonymizeManager?->isEnabled()) {
+        if (! $this->anonymizeEnabled || ! static::getAnonymizeManager()->isEnabled()) {
             return parent::getAttributeValue($key);
         }
 
@@ -120,7 +105,7 @@ trait Anonymized
 
             if (! isset($this->anonymizedAttributeCache) || $this->anonymizedAttributeCacheSeed !== $seed) {
                 $this->anonymizedAttributeCache = $this->getAnonymizedAttributes(
-                    static::$anonymizeManager->faker($seed)
+                    static::getAnonymizeManager()->faker($seed)
                 );
 
                 $this->anonymizedAttributeCacheSeed = $seed;

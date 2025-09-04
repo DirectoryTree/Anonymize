@@ -1,11 +1,10 @@
 <?php
 
-use DirectoryTree\Anonymize\AnonymizeManager;
+use DirectoryTree\Anonymize\Facades\Anonymize;
 use DirectoryTree\Anonymize\Tests\AnonymizedModel;
-use Faker\Factory;
 
 it('does not leak data via serialize', function () {
-    setManager()->enable();
+    Anonymize::enable();
 
     $model = new AnonymizedModel([
         'name' => 'Foo Bar',
@@ -15,7 +14,7 @@ it('does not leak data via serialize', function () {
 });
 
 it('invalidates attribute cache when seed changes', function () {
-    setManager()->enable();
+    Anonymize::enable();
 
     $model = new AnonymizedModel([
         'id' => 1,
@@ -32,7 +31,7 @@ it('invalidates attribute cache when seed changes', function () {
 });
 
 it('generates different attributes for models with distinct ids', function () {
-    setManager()->enable();
+    Anonymize::enable();
 
     $model1Attributes = (new AnonymizedModel([
         'id' => 1,
@@ -48,7 +47,7 @@ it('generates different attributes for models with distinct ids', function () {
 });
 
 it('generates the same attributes for models with the same id', function () {
-    setManager()->enable();
+    Anonymize::enable();
 
     $model1Attributes = (new AnonymizedModel([
         'id' => 1,
@@ -64,7 +63,7 @@ it('generates the same attributes for models with the same id', function () {
 });
 
 it('overwrites only anonymized attributes', function () {
-    setManager()->enable();
+    Anonymize::enable();
 
     $attributes = (new AnonymizedModel([
         'favourite_color' => 'blue',
@@ -74,7 +73,7 @@ it('overwrites only anonymized attributes', function () {
 });
 
 it('anonymizes only attributes that exist on the model', function () {
-    setManager()->enable();
+    Anonymize::enable();
 
     $attributes = (new AnonymizedModel([
         'name' => 'Foo Bar',
@@ -84,7 +83,7 @@ it('anonymizes only attributes that exist on the model', function () {
 });
 
 it('anonymizes attributes array when anonymization is enabled', function () {
-    setManager()->enable();
+    Anonymize::enable();
 
     $attributes = (new AnonymizedModel([
         'name' => 'original-title',
@@ -96,7 +95,7 @@ it('anonymizes attributes array when anonymization is enabled', function () {
 });
 
 it('anonymizes attributes when anonymization is enabled', function () {
-    setManager()->enable();
+    Anonymize::enable();
 
     $model = new AnonymizedModel([
         'name' => 'original-name',
@@ -108,7 +107,7 @@ it('anonymizes attributes when anonymization is enabled', function () {
 });
 
 it('does not anonymize attributes array when anonymization is disabled', function () {
-    setManager()->disable();
+    Anonymize::disable();
 
     $original = [
         'name' => 'Foo Bar',
@@ -121,7 +120,7 @@ it('does not anonymize attributes array when anonymization is disabled', functio
 });
 
 it('does not anonymize attributes when anonymization is disabled', function () {
-    setManager()->disable();
+    Anonymize::disable();
 
     $model = new AnonymizedModel([
         'name' => 'Foo Bar',
@@ -133,7 +132,7 @@ it('does not anonymize attributes when anonymization is disabled', function () {
 });
 
 it('disables anonymization within withoutAnonymization block', function () {
-    setManager()->enable();
+    Anonymize::enable();
 
     $original = [
         'name' => 'Foo Bar',
@@ -154,9 +153,16 @@ it('includes id in seed by default', function () {
     expect($seed)->toContain($id);
 });
 
-function setManager(): AnonymizeManager
-{
-    AnonymizedModel::setManager($manager = new AnonymizeManager(Factory::create()));
+it('flushes anonymization manager enablement', function (string $attribute, string $value) {
+    $model = new AnonymizedModel([$attribute => $value]);
 
-    return $manager;
-}
+    expect($model->getAttributeValue($attribute))->toBe($value);
+
+    Anonymize::enable();
+
+    expect($model->getAttributeValue($attribute))->not->toBe($value);
+})->with([
+    ['name', 'Foo Bar'],
+    ['email', 'foo.bar@example.com'],
+    ['address', '1600 Pennsylvania Avenue'],
+]);
