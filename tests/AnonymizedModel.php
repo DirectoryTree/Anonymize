@@ -14,6 +14,7 @@ class AnonymizedModel extends BaseModel implements Anonymizable
     {
         return [
             'name' => $faker->name(),
+            'email' => $faker->email(),
             'address' => $faker->address(),
         ];
     }
