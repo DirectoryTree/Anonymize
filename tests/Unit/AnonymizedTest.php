@@ -154,6 +154,22 @@ it('includes id in seed by default', function () {
     expect($seed)->toContain($id);
 });
 
+it('resets anonymization manager', function (string $attribute, string $value) {
+    $model = new AnonymizedModel([
+        'name' => 'Foo Bar',
+        'address' => '1600 Pennsylvania Avenue',
+    ]);
+
+    expect($model->getAttributeValue($attribute))->toBe($value);
+
+    setManager()->enable();
+
+    expect($model->getAttributeValue($attribute))->not->toBe($value);
+})->with([
+    ['name', 'Foo Bar'],
+    ['address', '1600 Pennsylvania Avenue'],
+]);
+
 function setManager(): AnonymizeManager
 {
     AnonymizedModel::setManager($manager = new AnonymizeManager(Factory::create()));
