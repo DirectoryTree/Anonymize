@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\App;
 trait AnonymizesAttributes
 {
     /**
+     * Whether anonymization is enabled for the current instance.
+     */
+    protected bool $anonymizeEnabled = true;
+
+    /**
      * The anonymized attributes for the current instance and seed.
      */
     protected array $anonymizedAttributeCache;
@@ -15,6 +20,27 @@ trait AnonymizesAttributes
      * The seed for the cached anonymized attributes.
      */
     protected string $anonymizedAttributeCacheSeed;
+
+    /**
+     * Execute a callback without anonymization.
+     *
+     * @template TReturn
+     *
+     * @param  callable($this): TReturn  $callback
+     * @return TReturn
+     */
+    public function withoutAnonymization(callable $callback): mixed
+    {
+        $previous = $this->anonymizeEnabled;
+
+        $this->anonymizeEnabled = false;
+
+        try {
+            return $callback($this);
+        } finally {
+            $this->anonymizeEnabled = $previous;
+        }
+    }
 
     /**
      * Get the seed for the anonymizable instance.
@@ -48,17 +74,19 @@ trait AnonymizesAttributes
      */
     protected function getCachedAnonymizedAttributes(): array
     {
-        $seed = $this->getAnonymizableSeed();
+        return $this->withoutAnonymization(function (): array {
+            $seed = $this->getAnonymizableSeed();
 
-        if (! isset($this->anonymizedAttributeCache) || $this->anonymizedAttributeCacheSeed !== $seed) {
-            $this->anonymizedAttributeCache = $this->getAnonymizedAttributes(
-                static::getAnonymizeManager()->faker($seed)
-            );
+            if (! isset($this->anonymizedAttributeCache) || $this->anonymizedAttributeCacheSeed !== $seed) {
+                $this->anonymizedAttributeCache = $this->getAnonymizedAttributes(
+                    static::getAnonymizeManager()->faker($seed)
+                );
 
-            $this->anonymizedAttributeCacheSeed = $seed;
-        }
+                $this->anonymizedAttributeCacheSeed = $seed;
+            }
 
-        return $this->anonymizedAttributeCache;
+            return $this->anonymizedAttributeCache;
+        });
     }
 
     /**

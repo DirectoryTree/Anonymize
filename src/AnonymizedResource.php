@@ -15,7 +15,7 @@ trait AnonymizedResource
     {
         $attributes = parent::resolve($request);
 
-        if (! static::getAnonymizeManager()->isEnabled()) {
+        if (! $this->anonymizeEnabled || ! static::getAnonymizeManager()->isEnabled()) {
             return $attributes;
         }
 

@@ -25,7 +25,7 @@ trait Anonymized
     {
         $attributes = parent::attributesToArray();
 
-        if (static::getAnonymizeManager()->isEnabled()) {
+        if ($this->anonymizeEnabled && static::getAnonymizeManager()->isEnabled()) {
             $attributes = $this->addAnonymizedAttributesToArray($attributes);
         }
 
@@ -39,7 +39,7 @@ trait Anonymized
      */
     public function getAttributeValue($key): mixed
     {
-        if (! static::getAnonymizeManager()->isEnabled()) {
+        if (! $this->anonymizeEnabled || ! static::getAnonymizeManager()->isEnabled()) {
             return parent::getAttributeValue($key);
         }
 
