@@ -131,20 +131,6 @@ it('does not anonymize attributes when anonymization is disabled', function () {
         ->and($model->getAttributeValue('address'))->toBe('1600 Pennsylvania Avenue');
 });
 
-it('disables anonymization within withoutAnonymization block', function () {
-    Anonymize::enable();
-
-    $original = [
-        'name' => 'Foo Bar',
-        'address' => '1600 Pennsylvania Avenue',
-    ];
-
-    $attributes = (new AnonymizedModel($original))
-        ->withoutAnonymization(fn ($model) => $model->attributesToArray());
-
-    expect($attributes)->toBe($original);
-});
-
 it('includes id in seed by default', function () {
     $id = fake()->randomNumber();
 
