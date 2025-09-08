@@ -17,6 +17,14 @@ trait AnonymizesAttributes
     protected string $anonymizedAttributeCacheSeed;
 
     /**
+     * Get the seed for the anonymizable instance.
+     */
+    public function getAnonymizableSeed(): string
+    {
+        return get_class($this).':'.($this->getAttributes()[$this->getKeyName()] ?? '');
+    }
+
+    /**
      * Add the anonymized attributes to the attribute array.
      *
      * @param  array<string, mixed>  $attributes
@@ -40,27 +48,17 @@ trait AnonymizesAttributes
      */
     protected function getCachedAnonymizedAttributes(): array
     {
-        return $this->withoutAnonymization(function (): array {
-            $seed = $this->getAnonymizableSeed();
+        $seed = $this->getAnonymizableSeed();
 
-            if (! isset($this->anonymizedAttributeCache) || $this->anonymizedAttributeCacheSeed !== $seed) {
-                $this->anonymizedAttributeCache = $this->getAnonymizedAttributes(
-                    static::getAnonymizeManager()->faker($seed)
-                );
+        if (! isset($this->anonymizedAttributeCache) || $this->anonymizedAttributeCacheSeed !== $seed) {
+            $this->anonymizedAttributeCache = $this->getAnonymizedAttributes(
+                static::getAnonymizeManager()->faker($seed)
+            );
 
-                $this->anonymizedAttributeCacheSeed = $seed;
-            }
+            $this->anonymizedAttributeCacheSeed = $seed;
+        }
 
-            return $this->anonymizedAttributeCache;
-        });
-    }
-
-    /**
-     * Get the seed for the anonymizable instance.
-     */
-    public function getAnonymizableSeed(): string
-    {
-        return get_class($this).':'.$this->getAttributeValue('id');
+        return $this->anonymizedAttributeCache;
     }
 
     /**
