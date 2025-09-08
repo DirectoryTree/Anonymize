@@ -7,12 +7,12 @@ it('anonymizes json resource when anonymization is enabled', function () {
     Anonymize::enable();
 
     $resource = new AnonymizedJsonResource([
-        'name' => 'original-name',
-        'address' => 'original-address',
+        'name' => 'Foo Bar',
+        'address' => '1600 Pennsylvania Avenue',
     ]);
 
-    expect($resource->resolve())->not->toHaveKey('name', 'original-name')
-        ->and($resource->resolve())->not->toHaveKey('address', 'original-address');
+    expect($resource->resolve())->not->toHaveKey('name', 'Foo Bar')
+        ->and($resource->resolve())->not->toHaveKey('address', '1600 Pennsylvania Avenue');
 });
 
 it('does not anonymize json resource when anonymization is disabled', function () {
