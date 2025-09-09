@@ -47,7 +47,7 @@ trait AnonymizesAttributes
      */
     public function getAnonymizableSeed(): string
     {
-        return get_class($this).':'.($this->getAttributes()[$this->getKeyName()] ?? '');
+        return get_class($this).':'.$this->getKey();
     }
 
     /**
