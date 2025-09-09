@@ -71,7 +71,13 @@ trait AnonymizesAttributes
                 continue;
             }
 
-            $attributes[$key] = $value;
+            if (! is_array($attributes[$key])) {
+                $attributes[$key] = $value;
+
+                continue;
+            }
+
+            $attributes[$key] = $this->addAnonymizedAttributesToArray($value) + $attributes[$key];
         }
 
         return $attributes;
