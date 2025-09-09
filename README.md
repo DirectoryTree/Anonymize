@@ -180,6 +180,59 @@ public function getAnonymizedAttributes(Generator $faker): array
 }
 ```
 
+### Anonymizing JSON Resources
+
+You can also anonymize Laravel JSON resources by implementing the `Anonymizable` interface and using the `AnonymizedResource` trait:
+
+```php
+<?php
+
+namespace App\Http\Resources;
+
+use Faker\Generator;
+use Illuminate\Http\Request;
+use DirectoryTree\Anonymize\Anonymizable;
+use DirectoryTree\Anonymize\AnonymizedResource;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class UserResource extends JsonResource implements Anonymizable
+{
+    use AnonymizedResource;
+    
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'phone' => $this->phone,
+        ];
+    }
+
+    public function getAnonymizedAttributes(Generator $faker): array
+    {
+        return [
+            'name' => $faker->name(),
+            'email' => $faker->safeEmail(),
+            'phone' => $faker->phoneNumber(),
+        ];
+    }
+}
+```
+
+When anonymization is enabled, the resource will automatically replace sensitive data in the JSON response:
+
+```php
+Anonymize::enable();
+
+$user = User::find(1);
+
+$resource = new UserResource($user);
+
+// Returns anonymized data instead of original values.
+$response = $resource->resolve();
+```
+
 ## Testing
 
 ```bash
