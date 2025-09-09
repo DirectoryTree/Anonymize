@@ -8,7 +8,7 @@ use Faker\Generator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AnonymizedJsonResource extends JsonResource implements Anonymizable
+class NestedAnonymizedResource extends JsonResource implements Anonymizable
 {
     use AnonymizedResource;
 
@@ -21,16 +21,6 @@ class AnonymizedJsonResource extends JsonResource implements Anonymizable
     {
         return [
             'name' => $faker->name(),
-            'address' => $faker->address(),
-            'role' => [
-                'name' => $faker->word(),
-                'permissions' => [
-                    ['name' => $faker->word()],
-                ],
-            ],
-            'nested' => [
-                'name' => $faker->name(),
-            ],
         ];
     }
 
