@@ -19,7 +19,7 @@ class AnonymizedJsonResource extends JsonResource implements Anonymizable
         ];
     }
 
-    public function getAnonymizableSeed(): string
+    public function getAnonymizableKey(): string
     {
         return 1;
     }

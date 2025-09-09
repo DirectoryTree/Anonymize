@@ -43,11 +43,19 @@ trait AnonymizesAttributes
     }
 
     /**
+     * Get the key for the anonymizable instance.
+     */
+    public function getAnonymizableKey(): ?string
+    {
+        return $this->getKey();
+    }
+
+    /**
      * Get the seed for the anonymizable instance.
      */
     public function getAnonymizableSeed(): string
     {
-        return get_class($this).':'.$this->getKey();
+        return get_class($this).':'.$this->getAnonymizableKey();
     }
 
     /**
