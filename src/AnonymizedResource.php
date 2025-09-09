@@ -9,6 +9,7 @@ trait AnonymizedResource
     /**
      * Transform the resource into an array.
      *
+     * @param  \Illuminate\Http\Request|null  $request
      * @return array<string, mixed>
      */
     public function resolve($request = null): array
