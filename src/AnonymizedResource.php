@@ -7,15 +7,13 @@ trait AnonymizedResource
     use AnonymizesAttributes;
 
     /**
-     * Transform the resource into an array.
+     * Anonymize the given attributes.
      *
-     * @param  \Illuminate\Http\Request|null  $request
+     * @param  array<string, mixed>  $attributes
      * @return array<string, mixed>
      */
-    public function resolve($request = null): array
+    public function toAnonymized(array $attributes): array
     {
-        $attributes = parent::resolve($request);
-
         if (! $this->anonymizeEnabled || ! static::getAnonymizeManager()->isEnabled()) {
             return $attributes;
         }

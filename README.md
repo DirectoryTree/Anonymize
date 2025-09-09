@@ -201,12 +201,12 @@ class UserResource extends JsonResource implements Anonymizable
     
     public function toArray(Request $request): array
     {
-        return [
+        return $this->toAnonymized([
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
-        ];
+        ]);
     }
 
     public function getAnonymizedAttributes(Generator $faker): array
