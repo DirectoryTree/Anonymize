@@ -28,7 +28,7 @@ it('does not anonymize json resource when anonymization is disabled', function (
         ->and($resource->resolve())->toHaveKey('address', '1600 Pennsylvania Avenue');
 });
 
-it('anonymizes nested arrays', function () {
+it('anonymizes nested arrays and resources', function () {
     Anonymize::enable();
 
     $resource = new AnonymizedJsonResource([
