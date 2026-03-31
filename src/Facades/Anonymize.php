@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool isEnabled()
  * @method static \Faker\Generator faker(string|int|null $seed = null)
  *
- * @see \DirectoryTree\Anonymize\AnonymizeManager
+ * @see AnonymizeManager
  */
 class Anonymize extends Facade
 {

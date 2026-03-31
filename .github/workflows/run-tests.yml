@@ -15,6 +15,10 @@ jobs:
         php: [8.2, 8.3, 8.4]
         include:
           - php: 8.4
+            laravel: 13.*
+            testbench: 11.*
+
+          - php: 8.4
             laravel: 12.*
             testbench: 10.*
 

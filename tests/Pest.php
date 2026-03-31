@@ -1,3 +1,5 @@
 <?php
 
-uses(DirectoryTree\Anonymize\Tests\TestCase::class)->in(__DIR__);
+use DirectoryTree\Anonymize\Tests\TestCase;
+
+uses(TestCase::class)->in(__DIR__);
