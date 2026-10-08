@@ -1,10 +1,23 @@
-# Anonymize
+<h1 align="center">Anonymize</h1>
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/directorytree/anonymize.svg?style=flat-square)](https://packagist.org/packages/directorytree/anonymize)
-[![Tests](https://img.shields.io/github/actions/workflow/status/DirectoryTree/Anonymize/run-tests.yml?branch=master&label=tests&style=flat-square)](https://github.com/DirectoryTree/Anonymize/actions/workflows/tests.yml)
-[![Total Downloads](https://img.shields.io/packagist/dt/directorytree/anonymize.svg?style=flat-square)](https://packagist.org/packages/directorytree/anonymize)
+<p align="center">Replace sensitive Eloquent model attributes with realistic fake data.</p>
 
-Anonymize replaces sensitive model data with realistic fake data using Faker. Perfect for development environments, demos, and data sharing scenarios where you need to protect user privacy while maintaining data structure and relationships.
+<p align="center">
+    <a href="https://github.com/DirectoryTree/Anonymize/actions/workflows/run-tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/DirectoryTree/Anonymize/run-tests.yml?branch=master&amp;style=flat-square" alt="Tests"></a>
+    <a href="https://packagist.org/packages/directorytree/anonymize"><img src="https://img.shields.io/packagist/dt/directorytree/anonymize.svg?style=flat-square" alt="Total Downloads"></a>
+    <a href="https://packagist.org/packages/directorytree/anonymize"><img src="https://img.shields.io/packagist/v/directorytree/anonymize.svg?style=flat-square" alt="Latest Version"></a>
+    <a href="https://github.com/DirectoryTree/Anonymize/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/DirectoryTree/Anonymize?style=flat-square" alt="License"></a>
+</p>
+
+<p align="center">
+    <a href="#installation">Installation</a>
+    <span> · </span>
+    <a href="#usage">Usage</a>
+    <span> · </span>
+    <a href="#testing">Testing</a>
+</p>
+
+---
 
 ## Features
 
@@ -21,7 +34,7 @@ Anonymize replaces sensitive model data with realistic fake data using Faker. Pe
 
 ## Installation
 
-You can install the Anonymize using Composer:
+Install the package with Composer:
 
 ```bash
 composer require directorytree/anonymize
@@ -198,7 +211,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class UserResource extends JsonResource implements Anonymizable
 {
     use AnonymizedResource;
-    
+
     public function toArray(Request $request): array
     {
         return $this->toAnonymized([
